@@ -74,11 +74,13 @@
 	</dependencies>
 
 	<build>
+		<finalName>tg-bot</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<outputDirectory>chatbot</outputDirectory>
 					<executable>true</executable>
 				</configuration>
 			</plugin>

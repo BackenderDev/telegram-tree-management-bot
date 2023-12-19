@@ -1,0 +1,33 @@
+version: '3'
+
+volumes:
+  maven-data:
+  db-data:
+
+services:
+
+  postgres:
+    image: postgres:alpine3.18
+    container_name: "db"
+    ports:
+      - "5423:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=ChatBot
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+
+  tg-bot:
+    image: 'docker-spring-boot-postgres:latest'
+    depends_on:
+      - postgres
+    build:
+      context: .
+    container_name: "app"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/ChatBot
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update

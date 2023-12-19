@@ -20,7 +20,7 @@ public class RootElement {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rootElement")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rootElement",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ChildrenElement> childrenElements;
     public RootElement(String name){
         this.name = name;
