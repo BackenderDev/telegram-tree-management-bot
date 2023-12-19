@@ -10,7 +10,7 @@ Telegram API Token
 Getting Started
 
 1. Clone the Repository:
-git clone https://github.com/BackenderDev/telegram-tree-bot.git
+git clone https://github.com/BackenderDev/telegram-tree-management-bot.git
 cd telegram-tree-bot
 2. Set Up PostgreSQL Database:
 Create a PostgreSQL database and update the application.properties file with the database configuration.
