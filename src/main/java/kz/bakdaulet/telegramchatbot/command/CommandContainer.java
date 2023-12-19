@@ -17,6 +17,7 @@ public class CommandContainer {
                 HELP.getCommandName(), new HelpCommand(sendBotMessageService),
                 NO.getCommandName(), new NoCommand(sendBotMessageService),
                 VIEW_TREE.getCommandName(), new ViewTreeCommand(sendBotMessageService),
+                ADD_ELEMENT.getCommandName(), new AddElementCommand(sendBotMessageService),
                 REMOVE_ELEMENT.getCommandName(), new RemoveElementCommand(sendBotMessageService),
                 DOWNLOAD.getCommandName(), new DownloadCommand(sendBotMessageService),
                 UPLOAD.getCommandName(), new UploadCommand(sendBotMessageService)

@@ -1,5 +1,6 @@
 package kz.bakdaulet.telegramchatbot.contoller;
 
+
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -33,7 +34,15 @@ public class DownloadFile {
 
     @SneakyThrows
     public void upload(TelegramBot telegramBot, GetFile file){
-        downloadExcelFile(telegramBot.execute(file));
+        File file1 = telegramBot.execute(file);
+        if (isExcelFile(file1)){
+            downloadExcelFile(telegramBot.execute(file));
+        }else
+            updateController.sendText("Вы ввели файл другого формата. Я принимаю файл только в формате \"xlsx\".");
+    }
+    public boolean isExcelFile(File file){
+        String fileName = file.getFilePath();
+        return fileName != null && fileName.toLowerCase().endsWith(".xlsx");
     }
 
     private void downloadExcelFile(File file){
@@ -60,7 +69,7 @@ public class DownloadFile {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(connection.getInputStream());
 
-            java.io.File downloadedFile = new java.io.File("src/downLoadFiles/"+generateFileName());
+            java.io.File downloadedFile = new java.io.File("src/main/resources/file/downLoadFiles/"+generateFileName());
             FileOutputStream out = new FileOutputStream(downloadedFile);
 
             byte[] buffer = new byte[1024];
@@ -81,7 +90,7 @@ public class DownloadFile {
     }
     public void readCategoriesFromWorkbook(Workbook workbook) {
         Sheet sheet = workbook.getSheetAt(0);
-        Map<String, List<String>> map = new HashMap<>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         if (sheet != null) {
             for (Row row : sheet) {
                 Cell rootCell = row.getCell(0);
@@ -89,14 +98,28 @@ public class DownloadFile {
                 if(rootCell != null && childCell != null){
                     String root = rootCell.getStringCellValue();
                     String child = childCell.getStringCellValue();
+                    System.out.println(root+"  "+child);
+                    List<String> children;
                     if(!map.containsKey(root)){
-                        List<String> children = new ArrayList<>();
-                        children.add(child);
-                        map.put(root, children);
+                        children = new ArrayList<>();
                     }else{
-                        map.get(root).add(child);
+                        children = map.get(root);
+                    }
+                    children.add(child);
+                    System.out.println(children);
+                    map.put(root, children);
+                }else if(rootCell != null){
+                    String root = rootCell.getStringCellValue();
+                    System.out.println(root);
+                    if(!map.containsKey(root)){
+                        map.put(root, new ArrayList<>());
                     }
                 }
+            }
+            for (Map.Entry<String,List<String>> entry : map.entrySet()){
+                System.out.println(entry.getKey()+": ");
+                for (String s : entry.getValue())
+                    System.out.println("  "+s);
             }
             updateController.add(map);
         }

@@ -17,9 +17,8 @@ public class RootElementService {
     private final RootElementRepository rootElementRepository;
 
     public List<RootElement> findAll(){
-        Iterable<RootElement> rootElements = rootElementRepository.findAll();
         List<RootElement> rootElementList = new ArrayList<>();
-        rootElements.forEach(rootElementList::add);
+        rootElementRepository.findAll().forEach(rootElementList::add);
 
         return rootElementList;
     }
@@ -36,5 +35,10 @@ public class RootElementService {
     @Transactional
     public void delete(Integer id){
         rootElementRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAll(){
+        rootElementRepository.deleteAll();
     }
 }

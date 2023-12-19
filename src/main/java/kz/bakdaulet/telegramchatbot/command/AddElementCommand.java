@@ -5,8 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class AddElementCommand implements Command{
     private final SendBotMessageService sendBotMessageService;
-    private final static String ANSWER_MESSAGE_FOR_ADDING = "Товар добавлен.\n" +
-                                                            "Можете посмотреть через /viewTree";
+    public final static String ANSWER_MESSAGE_FOR_ADDING = "Товар добавлен.\n" +
+                                                            "Вы можете посмотреть через /viewTree";
 
     public AddElementCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

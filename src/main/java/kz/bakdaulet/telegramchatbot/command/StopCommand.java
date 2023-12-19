@@ -7,7 +7,7 @@ public class StopCommand implements Command{
 
     private final SendBotMessageService sendBotMessageService;
 
-    public static final String STOP_MESSAGE = "";
+    public static final String STOP_MESSAGE = "Я удалил все файлы.";
 
     public StopCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

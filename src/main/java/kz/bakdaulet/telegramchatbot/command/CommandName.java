@@ -8,7 +8,6 @@ public enum CommandName {
     STOP("/stop"),
     NO("nocommand"),
     HELP("/help"),
-    ANSWER_COMMAND("/answerCommand"),
     VIEW_TREE("/viewTree"),
     ADD_ELEMENT("/addElement"),
     REMOVE_ELEMENT("/removeElement"),

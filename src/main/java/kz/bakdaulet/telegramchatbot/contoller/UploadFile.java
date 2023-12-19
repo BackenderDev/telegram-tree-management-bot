@@ -21,26 +21,32 @@ import java.util.Map;
 public class UploadFile {
     public String writeExcel(Map<String, List<String>> data) {
         File file = new File("TelegramChatBot");
-        String filePath = file.getAbsolutePath().replace("TelegramChatBot\\", "") + "/src/uploadFiles/" + generateFileName();
+        String filePath = file.getAbsolutePath().replace("TelegramChatBot\\", "") + "/src/main/resources/file/uploadFiles/" + generateFileName();
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Data");
+            Sheet sheet = workbook.createSheet();
 
             int rowNum = 0;
             for (Map.Entry<String, List<String>> entry : data.entrySet()) {
-                Row row = sheet.createRow(rowNum++);
-                int colNum = 0;
-                row.createCell(colNum++).setCellValue(entry.getKey());
-                for (String value : entry.getValue()) {
-                    row.createCell(colNum++).setCellValue(value);
+                if (!entry.getValue().isEmpty()) {
+                    for (String value : entry.getValue()) {
+                        Row row = sheet.createRow(rowNum++);
+                        row.createCell(0).setCellValue(entry.getKey());
+                        row.createCell(1).setCellValue(value);
+                    }
+                }else{
+                    Row row = sheet.createRow(rowNum++);
+                    row.createCell(0).setCellValue(entry.getKey());
                 }
             }
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
             }catch (UploadFileException e){
                 log.error(e);
+                throw new UploadFileException("К сожалению, файл не загружается", e);
             }
         } catch (IOException e) {
             log.error(e);
+            throw new UploadFileException(e);
         }
         return filePath;
     }

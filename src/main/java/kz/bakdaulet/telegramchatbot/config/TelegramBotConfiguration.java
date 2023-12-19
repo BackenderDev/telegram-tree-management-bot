@@ -2,7 +2,6 @@ package kz.bakdaulet.telegramchatbot.config;
 
 import kz.bakdaulet.telegramchatbot.contoller.TelegramBot;
 import lombok.extern.log4j.Log4j;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;

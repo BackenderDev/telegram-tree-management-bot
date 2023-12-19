@@ -5,8 +5,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class RemoveElementCommand implements Command{
     private final SendBotMessageService sendBotMessageService;
-    private final static String ANSWER_MESSAGE_FOR_REMOVING = "Товар удален.\n" +
-                                                              "Можете посмотреть через /viewTree";
+    public final static String ANSWER_MESSAGE_FOR_REMOVING = "Товар удален.\n" +
+                                                              "Вы можете посмотреть через /viewTree";
 
     public RemoveElementCommand(SendBotMessageService sendBotMessageService) {
         this.sendBotMessageService = sendBotMessageService;

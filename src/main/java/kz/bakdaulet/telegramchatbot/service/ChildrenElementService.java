@@ -3,6 +3,8 @@ package kz.bakdaulet.telegramchatbot.service;
 import kz.bakdaulet.telegramchatbot.model.ChildrenElement;
 import kz.bakdaulet.telegramchatbot.repository.ChildrenElementRepository;
 import kz.bakdaulet.telegramchatbot.repository.RootElementRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,5 +32,10 @@ public class ChildrenElementService {
     @Transactional
     public void delete(Integer id){
         childrenElementRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void deleteAll(){
+        childrenElementRepository.deleteAll();
     }
 }

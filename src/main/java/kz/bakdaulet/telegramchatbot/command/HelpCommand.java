@@ -17,6 +17,7 @@ public class HelpCommand implements Command {
                     %s - принимает Excel документ с деревом категорий и сохраняет все элементы в базе данных
 
                     %s - приостановить работу со мной
+                    
                     %s - получить помощь в работе со мной
                     """,
             VIEW_TREE.getCommandName(),ADD_ELEMENT.getCommandName(),

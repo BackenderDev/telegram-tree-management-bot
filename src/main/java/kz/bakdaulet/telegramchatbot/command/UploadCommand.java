@@ -4,7 +4,7 @@ import kz.bakdaulet.telegramchatbot.service.SendBotMessageService;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class UploadCommand implements Command{
-    public static final String UPLOAD_MESSAGE = "";
+    public static final String UPLOAD_MESSAGE = "Вы можете посмотреть через /viewTree";
 
     private final SendBotMessageService sendBotMessageService;
 

@@ -27,7 +27,6 @@ public class UpdateController {
     private static final String DOWNLOAD_ = "/downloadFile";
     private static Boolean addStatus = false;
     private static Boolean removeStatus = false;
-    private static Boolean uploadStatus = false;
     private static Boolean stopStatus = false;
     private CommandContainer commandContainer;
     private final RootElementService rootElementService;
@@ -73,18 +72,12 @@ public class UpdateController {
                         sendMessage(message);
                     } else
                         removeElement(message);
-                } else if (uploadStatus) {
-                    if (message.startsWith(COMMAND_PREFIX)) {
-                        uploadStatus = false;
-                        sendMessage(message);
-                    } else
-                        upload();
                 } else if (stopStatus) {
                     if (message.startsWith(COMMAND_PREFIX)) {
-                        uploadStatus = false;
+                        stopStatus = false;
                         sendMessage(message);
                     } else
-                        stop();
+                        stop(message);
                 } else if (message.startsWith(COMMAND_PREFIX)) {
                     sendMessage(message);
                 } else {
@@ -102,15 +95,24 @@ public class UpdateController {
                 case VIEW_TREE_ -> viewTree();
                 case ADD_ELEMENT_ -> sendMessage("Пишите <название элемента> или <родительский элемент> <дочерний элемент>", 1) ;
                 case REMOVE_ELEMENT_ -> sendMessage("Пишите <название элемента>", 2);
-                case UPLOAD_ -> sendMessage("Добавляйте файл",3);
+                case UPLOAD_ -> sendText("Я принимаю файл только в формате \"xlsx\".\nДобавляйте файл:");
                 case DOWNLOAD_ -> download();
-                case STOP_ -> sendMessage("Я удалю все файлы, вы уверены в себе?", 4);
+                case STOP_ -> sendMessage("Я удалю все файлы, вы уверены в себе? Если вы уверен себе пишите Да или Нет", 3);
                 default -> commandContainer.retrieveCommand(commandIdentifier).execute(update);
             }
     }
 
-    private void stop() {
-
+    private void stop(String message) {
+        if (message.equals("Да")){
+            childrenElementService.deleteAll();
+            rootElementService.deleteAll();
+            sendText("Нажмите /help, чтобы просмотреть команды");
+        }else if (message.equals("Нет")){
+            stopStatus = false;
+            sendText("Нажмите /help, чтобы просмотреть команды");
+        }else{
+            sendText("Пишите Да или Нет");
+        }
     }
 
     private void sendMessage(String message, int id){
@@ -119,27 +121,29 @@ public class UpdateController {
         }else if (id == 2){
             removeStatus = true;
         }else if(id == 3){
-            uploadStatus = true;
-        }else if(id == 4){
             stopStatus = true;
         }
         sendText(message);
     }
 
-    private void sendText(String message){
+    public void sendText(String message){
         sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), message);
     }
     private void download() {
-        String fileName = uploadFile.writeExcel(readData());
-        uploadStatus = false;
-        sendBotMessageService.sendFile(update.getMessage().getChatId().toString(), fileName);
+        if (readData().isEmpty()){
+            sendText("Нет товара\nНажмите /help, чтобы просмотреть команды");
+        }else {
+            String fileName = uploadFile.writeExcel(readData());
+            sendBotMessageService.sendFile(update.getMessage().getChatId().toString(), fileName);
+            sendText("Нажмите /help, чтобы просмотреть команды");
+        }
     }
 
     private void upload() {
         if(update.getMessage().hasDocument()){
             downloadFile.upload(telegramBot, new GetFile(update.getMessage().getDocument().getFileId()));
         }else {
-            log.error("No file");
+            log.error("The file did not arrive");
         }
     }
     private void removeElement(String message) {
@@ -157,7 +161,7 @@ public class UpdateController {
                 sendMessage("В базе данных нет такого товара", 2);
             }
         }else {
-            commandContainer.retrieveCommand(ANSWER_COMMAND.getCommandName()).execute(update);
+            sendText("Введите в правильном формате:\n" + "<название элемента> или <родительский элемент> <дочерний элемент>");
         }
     }
 
@@ -184,10 +188,10 @@ public class UpdateController {
                     commandContainer.retrieveCommand(ADD_ELEMENT.getCommandName()).execute(update);
                 }
             }else {
-                sendMessage("В базе данных нет такого родительского товара", 1);
+                sendMessage("В базе данных нет такого родительского товара\nВы можете посмотреть через /viewTree", 1);
             }
         }else{
-            commandContainer.retrieveCommand(ANSWER_COMMAND.getCommandName()).execute(update);
+            sendText("Введите в правильном формате:\n" + "<название элемента>");
         }
     }
     private Optional<RootElement> check(String root){
@@ -198,6 +202,12 @@ public class UpdateController {
             Optional<RootElement> rootElement = check(entry.getKey());
             if(rootElement.isEmpty()){
                 rootElementService.save(new RootElement(entry.getKey()));
+                rootElement = check(entry.getKey());
+                if(rootElement.isPresent()) {
+                    for (String s : entry.getValue()) {
+                        childrenElementService.save(new ChildrenElement(s, rootElement.get()));
+                    }
+                }
             }else
                 for (String s : entry.getValue()){
                     Optional<ChildrenElement> childrenElement = childrenElementService.findByName(s);
@@ -206,7 +216,7 @@ public class UpdateController {
                     }
                 }
         }
-        sendBotMessageService.sendMessage(update.getMessage().getChatId().toString(), "Все товары добавлены");
+        sendText("Все товары добавлены.\nВы можете посмотреть через /viewTree");
     }
 
     private void viewTree() {
@@ -221,14 +231,15 @@ public class UpdateController {
             }
             index++;
         }
-        String id = update.getMessage().getChatId().toString();
         if (stringBuilder.isEmpty()){
-            sendBotMessageService.sendMessage(id, "Никакой товар нету");
-        }else
-            sendBotMessageService.sendMessage(id, stringBuilder.toString());
+            sendText("Нет товара\nНажмите /help, чтобы просмотреть команды");
+        }else {
+            stringBuilder.append("\n\n").append("Нажмите /help, чтобы просмотреть команды");
+            sendText(stringBuilder.toString());
+        }
     }
     private Map<String, List<String>> readData(){
-        Map<String, List<String>> map = new TreeMap<>();
+        Map<String, List<String>> map = new LinkedHashMap<>();
         List<RootElement> root = rootElementService.findAll();
         List<ChildrenElement> childList;
         List<String> childNames;
