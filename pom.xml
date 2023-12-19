@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>kz.bakdaulet</groupId>
-	<artifactId>TelegramChatBot</artifactId>
+	<artifactId>telegram-tree-management-bot</artifactId>
 	<version>0.0.1</version>
 	<name>TelegramChatBot</name>
 	<description>TelegramChatBot</description>
