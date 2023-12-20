@@ -69,7 +69,8 @@ public class DownloadFile {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(connection.getInputStream());
 
-            java.io.File downloadedFile = new java.io.File("src/main/resources/file/downLoadFiles/"+generateFileName());
+            new java.io.File("file/downLoadFiles").mkdirs();
+            java.io.File downloadedFile = new java.io.File("file/downLoadFiles/"+generateFileName());
             FileOutputStream out = new FileOutputStream(downloadedFile);
 
             byte[] buffer = new byte[1024];
