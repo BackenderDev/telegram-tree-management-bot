@@ -486,3 +486,24 @@ Caused by: java.io.FileNotFoundException: D:\BackendSpring\Telegram\src\files\ex
 2023-12-20 03:40:23 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
 2023-12-20 03:51:35 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
 2023-12-20 04:19:39 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:32:19 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:34:07 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:42:35 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:44:06 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:44:55 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:46:57 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 05:50:13 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:07:37 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:15:29 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:22:27 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:26:32 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:32:44 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:34:14 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:34:46 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:35:34 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:37:26 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:42:39 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:43:00 ERROR UploadFile:48 - java.io.FileNotFoundException: D:\BackendSpring\Telegram\telegram-tree-management-bot\TelegramChatBot\src\main\resources\file\uploadFiles\upload_excel_file_20231220_064259.xlsx (Системе не удается найти указанный путь)
+2023-12-20 06:44:38 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:49:14 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class
+2023-12-20 06:50:06 INFO  TelegramBotConfiguration:19 - TelegramBot registered in TelegramBotConfiguration class

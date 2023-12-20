@@ -4,3 +4,15 @@ bot:
   name: BakdauBot
   token: 6738642132:AAGnN6yJcR0P53R0mKccz8gjD4CMSKLR-nk
 
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ChatBot
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show-sql: true

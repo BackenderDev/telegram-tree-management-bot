@@ -18,7 +18,7 @@ public class ChildrenElement {
     private String name;
 
     @NotNull
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "root_id", referencedColumnName = "id")
     private RootElement rootElement;
 

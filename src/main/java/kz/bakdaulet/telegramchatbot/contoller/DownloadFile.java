@@ -98,7 +98,6 @@ public class DownloadFile {
                 if(rootCell != null && childCell != null){
                     String root = rootCell.getStringCellValue();
                     String child = childCell.getStringCellValue();
-                    System.out.println(root+"  "+child);
                     List<String> children;
                     if(!map.containsKey(root)){
                         children = new ArrayList<>();
@@ -106,20 +105,13 @@ public class DownloadFile {
                         children = map.get(root);
                     }
                     children.add(child);
-                    System.out.println(children);
                     map.put(root, children);
                 }else if(rootCell != null){
                     String root = rootCell.getStringCellValue();
-                    System.out.println(root);
                     if(!map.containsKey(root)){
                         map.put(root, new ArrayList<>());
                     }
                 }
-            }
-            for (Map.Entry<String,List<String>> entry : map.entrySet()){
-                System.out.println(entry.getKey()+": ");
-                for (String s : entry.getValue())
-                    System.out.println("  "+s);
             }
             updateController.add(map);
         }

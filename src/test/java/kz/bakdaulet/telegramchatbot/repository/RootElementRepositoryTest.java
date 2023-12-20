@@ -26,15 +26,15 @@ public class RootElementRepositoryTest {
     @Test
     public void shouldProperlyGetAlChildrenForRoot(){
         //when
-//        Optional<RootElement> root = rootElementRepository.findById(1);
-//
-//        //then
-//        Assertions.assertTrue(root.isPresent());
-//        Assertions.assertEquals(1, root.get().getId());
-//        List<ChildrenElement> child = root.get().getChildrenElements();
-//        for (int i = 0; i < 5; i++) {
-//            Assertions.assertEquals(Integer.valueOf(i + 1), child.get(i).getId());
-//        }
+        Optional<RootElement> root = rootElementRepository.findById(1);
+
+        //then
+        Assertions.assertTrue(root.isPresent());
+        Assertions.assertEquals(1, root.get().getId());
+        List<ChildrenElement> child = root.get().getChildrenElements();
+        for (int i = 0; i < 5; i++) {
+            Assertions.assertEquals(Integer.valueOf(i + 1), child.get(i).getId());
+        }
 
     }
 }

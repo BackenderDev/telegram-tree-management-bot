@@ -20,8 +20,8 @@ import java.util.Map;
 @Log4j
 public class UploadFile {
     public String writeExcel(Map<String, List<String>> data) {
-        File file = new File("TelegramChatBot");
-        String filePath = file.getAbsolutePath().replace("TelegramChatBot\\", "") + "/src/main/resources/file/uploadFiles/" + generateFileName();
+        File file = new File("telegram-tree-management-bot");
+        String filePath = file.getAbsolutePath().replace("telegram-tree-management-bot\\", "") + "/src/main/resources/file/uploadFiles/" + generateFileName();
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet();
 
