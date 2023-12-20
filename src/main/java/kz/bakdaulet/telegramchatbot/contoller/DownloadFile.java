@@ -1,6 +1,7 @@
 package kz.bakdaulet.telegramchatbot.contoller;
 
 
+import kz.bakdaulet.telegramchatbot.exception.DownloadFileException;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j;
 import org.apache.poi.ss.usermodel.Cell;
@@ -52,6 +53,7 @@ public class DownloadFile {
             readCategoriesFromWorkbook(workbook);
         } catch (IOException e) {
             log.error(e);
+            throw new DownloadFileException(e);
         }
     }
     private InputStream downloadFileByFilePath(String filePath) {
@@ -60,7 +62,7 @@ public class DownloadFile {
             return new FileInputStream(Objects.requireNonNull(downloadedFile));
         } catch (IOException e) {
             log.error(e);
-            return null;
+            throw new DownloadFileException(e);
         }
     }
     private java.io.File downloadFileFromTelegram(String filePath) {
@@ -69,7 +71,9 @@ public class DownloadFile {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             InputStream in = new BufferedInputStream(connection.getInputStream());
 
-            new java.io.File("file/downLoadFiles").mkdirs();
+            if(!new java.io.File("file/downLoadFiles").mkdirs()){
+                throw new DownloadFileException("Unfortunately, the file does not load");
+            }
             java.io.File downloadedFile = new java.io.File("file/downLoadFiles/"+generateFileName());
             FileOutputStream out = new FileOutputStream(downloadedFile);
 
@@ -86,7 +90,7 @@ public class DownloadFile {
             return downloadedFile;
         } catch (IOException e) {
             log.error(e);
-            return null;
+            throw new DownloadFileException(e);
         }
     }
     public void readCategoriesFromWorkbook(Workbook workbook) {

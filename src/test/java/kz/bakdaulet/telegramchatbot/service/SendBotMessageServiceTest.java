@@ -1,7 +1,6 @@
 package kz.bakdaulet.telegramchatbot.service;
 
 import kz.bakdaulet.telegramchatbot.contoller.TelegramBot;
-import kz.bakdaulet.telegramchatbot.service.SendBotMessageService;
 import kz.bakdaulet.telegramchatbot.service.impl.SendBotMessageServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,7 @@ public class SendBotMessageServiceTest {
     }
 
     @Test
-    public void shouldProperlySendMessage() throws TelegramApiException{
+    public void sendMessage_shouldInvokeTelegramBotExecute() throws TelegramApiException{
         //given
         String chatId = "test_chat_id";
         String message = "test_message";

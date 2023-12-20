@@ -23,6 +23,20 @@ public class RootElementService {
         return rootElementList;
     }
 
+    @Transactional
+    public boolean save(String rootElement){
+        if(check(rootElement) == null) {
+            save(new RootElement(rootElement));
+            return true;
+        }
+        return false;
+    }
+
+    public RootElement check(String rootElement){
+        return findByName(rootElement).orElse(null);
+    }
+
+
     public Optional<RootElement> findByName(String name){
         return rootElementRepository.findByName(name);
     }
@@ -32,10 +46,6 @@ public class RootElementService {
     }
 
 
-    @Transactional
-    public void delete(Integer id){
-        rootElementRepository.deleteById(id);
-    }
 
     @Transactional
     public void deleteAll(){

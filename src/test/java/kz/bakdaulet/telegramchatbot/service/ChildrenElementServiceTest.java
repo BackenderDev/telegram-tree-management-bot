@@ -31,7 +31,7 @@ public class ChildrenElementServiceTest {
     }
 
     @Test
-    public void shouldProperlySaveChildrenElement(){
+    public void saveChildrenElement_shouldInvokeRepositorySave(){
         //given
         RootElement rootElement = new RootElement();
         rootElement.setId(123456);

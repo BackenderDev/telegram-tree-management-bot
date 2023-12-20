@@ -19,7 +19,7 @@ abstract class AbstractCommandTest {
     abstract Command getCommand();
 
     @Test
-    public void shouldProperlyExecuteCommand() throws TelegramApiException {
+    public void executeCommand_shouldSendExpectedMessage() throws TelegramApiException {
         //given
         Long chatId = 1275434243257L;
 

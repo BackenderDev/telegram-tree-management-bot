@@ -27,7 +27,7 @@ public class ChildrenElementRepositoryTest {
 
     @Sql(scripts = {"/sql/clearDbs.sql", "/sql/fiveChildForRoot.sql"})
     @Test
-    public void shouldProperlyFindByRootElement(){
+    public void findById_shouldReturnCorrectNumberOfChildrenElements(){
         Optional<RootElement> rootElement = rootElementRepository.findById(1);
         //when
         List<ChildrenElement> child = new ArrayList<>();

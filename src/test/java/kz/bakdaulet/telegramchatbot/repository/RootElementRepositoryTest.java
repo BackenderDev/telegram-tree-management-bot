@@ -24,7 +24,7 @@ public class RootElementRepositoryTest {
 
     @Sql(scripts = {"/sql/clearDbs.sql", "/sql/fiveChildForRoot.sql"})
     @Test
-    public void shouldProperlyGetAlChildrenForRoot(){
+    public void findById_shouldReturnRootWithCorrectChildrenElements(){
         //when
         Optional<RootElement> root = rootElementRepository.findById(1);
 

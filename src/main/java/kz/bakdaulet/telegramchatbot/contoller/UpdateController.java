@@ -1,8 +1,6 @@
 package kz.bakdaulet.telegramchatbot.contoller;
 
 import kz.bakdaulet.telegramchatbot.command.CommandContainer;
-import kz.bakdaulet.telegramchatbot.model.ChildrenElement;
-import kz.bakdaulet.telegramchatbot.model.RootElement;
 import kz.bakdaulet.telegramchatbot.service.ChildrenElementService;
 import kz.bakdaulet.telegramchatbot.service.RootElementService;
 import kz.bakdaulet.telegramchatbot.service.impl.SendBotMessageServiceImpl;
@@ -19,12 +17,12 @@ import static kz.bakdaulet.telegramchatbot.command.CommandName.*;
 @Log4j
 public class UpdateController {
     private static final String COMMAND_PREFIX = "/";
-    private static final String VIEW_TREE_ = "/viewTree";
-    private static final String ADD_ELEMENT_ = "/addElement";
-    private static final String REMOVE_ELEMENT_ = "/removeElement";
-    private static final String STOP_ = "/stop";
-    private static final String UPLOAD_ = "/uploadFile";
-    private static final String DOWNLOAD_ = "/downloadFile";
+    private static final String VIEW_TREE_COMMAND = "/viewTree";
+    private static final String ADD_ELEMENT_COMMAND = "/addElement";
+    private static final String REMOVE_ELEMENT_COMMAND = "/removeElement";
+    private static final String STOP_COMMAND = "/stop";
+    private static final String UPLOAD_COMMAND = "/uploadFile";
+    private static final String DOWNLOAD_COMMAND = "/downloadFile";
     private static Boolean addStatus = false;
     private static Boolean removeStatus = false;
     private static Boolean stopStatus = false;
@@ -35,8 +33,10 @@ public class UpdateController {
     private DownloadFile downloadFile;
     private UploadFile uploadFile;
     private Update update;
+
     @Value("${bot.token}")
     private String botToken;
+
     private TelegramBot telegramBot;
     public void registerBot(TelegramBot telegramBot){
         this.telegramBot = telegramBot;
@@ -92,12 +92,12 @@ public class UpdateController {
     private void sendMessage(String message){
         String commandIdentifier = message.split(" ")[0];
             switch (commandIdentifier){
-                case VIEW_TREE_ -> viewTree();
-                case ADD_ELEMENT_ -> sendMessage("Пишите <название элемента> или <родительский элемент> <дочерний элемент>", 1) ;
-                case REMOVE_ELEMENT_ -> sendMessage("Пишите <название элемента>", 2);
-                case UPLOAD_ -> sendText("Я принимаю файл только в формате \"xlsx\".\nДобавляйте файл:");
-                case DOWNLOAD_ -> download();
-                case STOP_ -> sendMessage("Я удалю все файлы, вы уверены в себе? Если вы уверен себе пишите Да или Нет", 3);
+                case VIEW_TREE_COMMAND -> viewTree();
+                case ADD_ELEMENT_COMMAND -> sendMessage("Пишите <название элемента> или <родительский элемент> <дочерний элемент>", 1) ;
+                case REMOVE_ELEMENT_COMMAND -> sendMessage("Пишите <название элемента>", 2);
+                case UPLOAD_COMMAND -> sendText("Я принимаю файл только в формате \"xlsx\".\nДобавляйте файл:");
+                case DOWNLOAD_COMMAND -> download();
+                case STOP_COMMAND -> sendMessage("Я удалю все файлы, вы уверены в себе? Если вы уверен себе пишите Да или Нет", 3);
                 default -> commandContainer.retrieveCommand(commandIdentifier).execute(update);
             }
     }
@@ -147,14 +147,9 @@ public class UpdateController {
         }
     }
     private void removeElement(String message) {
-        String[] addElements = message.split(" ");
-        if(addElements.length == 1){
-            Optional<RootElement> rootElement = rootElementService.findByName(addElements[0]);
-            if(rootElement.isPresent()){
-                List<ChildrenElement> childrenElements = childrenElementService.
-                        findAll(rootElement.get().getId());
-                childrenElements.forEach((ChildrenElement ch) -> childrenElementService.delete(ch.getId()));
-                rootElementService.delete(rootElement.get().getId());
+        String[] removeElements = message.split(" ");
+        if(removeElements.length == 1){
+            if(childrenElementService.delete(removeElements[0])){
                 removeStatus = false;
                 commandContainer.retrieveCommand(REMOVE_ELEMENT.getCommandName()).execute(update);
             }else{
@@ -168,24 +163,19 @@ public class UpdateController {
     private void addElement(String message) {
         String[] addElements = message.split(" ");
         if(addElements.length == 1){
-            Optional<RootElement> rootElement = check(addElements[0]);
-            if (rootElement.isEmpty()) {
-                rootElementService.save(new RootElement(addElements[0]));
+            if (rootElementService.save(addElements[0])) {
                 addStatus = false;
                 commandContainer.retrieveCommand(ADD_ELEMENT.getCommandName()).execute(update);
             }else{
                 sendMessage("В базе данных такого родительского товар есть", 1);
             }
         }else if (addElements.length == 2){
-            Optional<RootElement> rootElement = check(addElements[0]);
-            if(rootElement.isPresent()){
-                Optional<ChildrenElement> childrenElement = childrenElementService.findByName(addElements[1]);
-                if(childrenElement.isPresent()){
-                    sendMessage("В базе данных такого товар есть", 1);
-                }else {
-                    childrenElementService.save(new ChildrenElement(addElements[1], rootElement.get()));
+            if(rootElementService.check(addElements[0]) != null){
+                if(childrenElementService.save(addElements[1], rootElementService.check(addElements[0]))){
                     addStatus = false;
                     commandContainer.retrieveCommand(ADD_ELEMENT.getCommandName()).execute(update);
+                } else {
+                    sendMessage("В базе данных такого товар есть", 1);
                 }
             }else {
                 sendMessage("В базе данных нет такого родительского товара\nВы можете посмотреть через /viewTree", 1);
@@ -194,29 +184,13 @@ public class UpdateController {
             sendText("Введите в правильном формате:\n" + "<название элемента>");
         }
     }
-    private Optional<RootElement> check(String root){
-        return rootElementService.findByName(root);
-    }
     public void add(Map<String, List<String>> map){
-        for (Map.Entry<String, List<String>> entry : map.entrySet()){
-            Optional<RootElement> rootElement = check(entry.getKey());
-            if(rootElement.isEmpty()){
-                rootElementService.save(new RootElement(entry.getKey()));
-                rootElement = check(entry.getKey());
-                if(rootElement.isPresent()) {
-                    for (String s : entry.getValue()) {
-                        childrenElementService.save(new ChildrenElement(s, rootElement.get()));
-                    }
-                }
-            }else
-                for (String s : entry.getValue()){
-                    Optional<ChildrenElement> childrenElement = childrenElementService.findByName(s);
-                    if (childrenElement.isEmpty()) {
-                        childrenElementService.save(new ChildrenElement(s, rootElement.get()));
-                    }
-                }
-        }
+        childrenElementService.saveAllData(map);
         sendText("Все товары добавлены.\nВы можете посмотреть через /viewTree");
+    }
+
+    private Map<String, List<String>> readData(){
+        return childrenElementService.readData();
     }
 
     private void viewTree() {
@@ -238,19 +212,5 @@ public class UpdateController {
             sendText(stringBuilder.toString());
         }
     }
-    private Map<String, List<String>> readData(){
-        Map<String, List<String>> map = new LinkedHashMap<>();
-        List<RootElement> root = rootElementService.findAll();
-        List<ChildrenElement> childList;
-        List<String> childNames;
-        for (RootElement rootElement : root) {
-            childList = childrenElementService.findAll(rootElement.getId());
-            childNames = new ArrayList<>();
-            for(ChildrenElement ch : childList){
-                childNames.add(ch.getName());
-            }
-            map.put(rootElement.getName(), childNames);
-        }
-        return map;
-    }
+
 }

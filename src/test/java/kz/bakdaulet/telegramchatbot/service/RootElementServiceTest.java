@@ -19,7 +19,7 @@ public class RootElementServiceTest {
     }
 
     @Test
-    public void shouldProperlySaveRootElement(){
+    public void saveRootElement_shouldInvokeRepositorySave(){
         //given
         RootElement rootElement = new RootElement();
         rootElement.setId(12345);

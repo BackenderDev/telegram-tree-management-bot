@@ -1,5 +1,6 @@
 package kz.bakdaulet.telegramchatbot.contoller;
 
+import kz.bakdaulet.telegramchatbot.exception.DownloadFileException;
 import kz.bakdaulet.telegramchatbot.exception.UploadFileException;
 import lombok.extern.log4j.Log4j;
 import org.apache.poi.ss.usermodel.Row;
@@ -21,7 +22,9 @@ import java.util.Map;
 public class UploadFile {
     public String writeExcel(Map<String, List<String>> data) {
         File file = new File("/file/uploadFiles");
-        file.mkdirs();
+        if(!file.mkdirs()){
+            throw new UploadFileException("Unfortunately, the directory was not created");
+        }
         System.out.println(file.getAbsolutePath());
         String filePath = file.getAbsolutePath().concat(generateFileName());
         try (Workbook workbook = new XSSFWorkbook()) {
@@ -44,7 +47,7 @@ public class UploadFile {
                 workbook.write(fileOut);
             }catch (UploadFileException e){
                 log.error(e);
-                throw new UploadFileException("К сожалению, файл не загружается", e);
+                throw new UploadFileException("Unfortunately, the file does not load", e);
             }
         } catch (IOException e) {
             log.error(e);
