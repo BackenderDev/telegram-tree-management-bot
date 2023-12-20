@@ -3,6 +3,7 @@ Telegram Tree Management Bot
 This project is a Telegram bot developed using Spring Boot, PostgreSQL, and the TelegramBots library. The bot allows users to create, view, and delete category trees.
 
 Requirements
+
 Java 17 or higher
 PostgreSQL
 Docker (optional, for Dockerization)
